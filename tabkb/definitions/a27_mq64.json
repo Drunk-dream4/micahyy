@@ -1,7 +1,7 @@
 {
 	"name": "czmao_a25_mq64",
-	"vendorId": "0x4A25",
-	"productId": "0x4A25",
+	"vendorId": "0x4A27",
+	"productId": "0x4A27",
 	"matrix": {
 		"rows": 5,
 		"cols": 15
