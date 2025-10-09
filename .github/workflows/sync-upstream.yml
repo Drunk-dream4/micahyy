@@ -1,0 +1,38 @@
+name: Auto Sync from micahyy/micahyy.github.io
+
+on:
+  schedule:
+    # 每天北京时间上午10点同步（UTC时间2点）
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/micahyy/micahyy.github.io.git
+          git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          # 切换到main分支
+          git checkout main
+          
+          # 合并上游更改（优先使用上游版本解决冲突）
+          git merge upstream/main --no-edit --strategy-option theirs
+          
+          # 推送到你的fork
+          git push origin main
